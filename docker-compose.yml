@@ -1,0 +1,22 @@
+version: '3.8'
+services:
+  nginx_static:
+    build:
+      context: ./frontend/
+    container_name: frontend
+    restart: always
+    ports:
+      - "80:80"
+    env_file:
+      - .env
+    networks:
+      - inception_network
+volumes:
+  frontend:
+    driver: local
+    driver_opts:
+      type: none
+      device: ./frontend/public/
+      o: bind
+networks:
+  inception_network:

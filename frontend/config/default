@@ -1,0 +1,13 @@
+# Localhost config
+server {
+        listen 80 http2;
+        listen [::]:80 http2;
+        server_name localhost;
+
+        root /var/www/localhost;
+        index index.php index.html index.htm;
+
+        location / {
+            try_files $uri $uri/ =404;
+        }
+}
