@@ -1,7 +1,7 @@
 # Localhost config
 server {
-    listen 80;
-    listen [::]:80;
+    listen 90;
+    listen [::]:90;
 
     server_name localhost;
 
