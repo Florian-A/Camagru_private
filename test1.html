@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,34 +9,53 @@
         #videoElement {
             display: none;
         }
+
         #canvasElement {
             width: 640px;
             aspect-ratio: 640 / 480;
             border: 1px solid black;
         }
+
         .imageButton {
             margin: 5px;
         }
+
+        #sticker {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .sticker-image {
+            width: 150px;
+            margin: 10px;
+            cursor: pointer;
+        }
     </style>
 </head>
+
 <body>
-    <input type="file" id="imageInput" accept="image/*">
-    <button class="imageButton" id="selectImage1">Sélectionner Image 1</button>
-    <button class="imageButton" id="selectImage2">Sélectionner Image 2</button>
-    <button class="imageButton" id="deselectImage">Désélectionner</button>
+    
     <video id="videoElement" autoplay></video>
     <canvas id="canvasElement"></canvas>
+    <div id="sticker"></div>
+    <button class="imageButton" id="deselectImage">Désélectionner</button>
 
     <script>
         const video = document.getElementById('videoElement');
         const canvas = document.getElementById('canvasElement');
         const context = canvas.getContext('2d');
         const imageInput = document.getElementById('imageInput');
-        const selectImage1Button = document.getElementById('selectImage1');
-        const selectImage2Button = document.getElementById('selectImage2');
         const deselectButton = document.getElementById('deselectImage');
         let overlayImages = [];
-        const images = ['hat1.png', 'hat2.png'];
+
+        const stickers = [
+            'hat1.png',
+            'hat2.png',
+            'hat3.png',
+            'hat4.png',
+        ];
 
         // Demander l'accès à la webcam
         navigator.mediaDevices.getUserMedia({ video: true })
@@ -46,15 +66,6 @@
                 console.error('Erreur d\'accès à la webcam :', error);
             });
 
-        
-        // Gestion des boutons pour sélectionner les images préchargées
-        selectImage1Button.addEventListener('click', () => {
-            toggleImage('hat1.png'); // Remplacez 'hat1.png' par le chemin de votre première image
-        });
-
-        selectImage2Button.addEventListener('click', () => {
-            toggleImage('hat2.png'); // Remplacez 'hat2.png' par le chemin de votre deuxième image
-        });
 
         // Désélectionner l'image actuellement superposée
         deselectButton.addEventListener('click', () => {
@@ -75,24 +86,18 @@
             img.src = source;
         }
 
-        // Fonction pour charger une image à partir d'un fichier sélectionné
-        imageInput.addEventListener('change', (event) => {
-            const file = event.target.files[0];
-            if (file) {
-                loadImage(file);
-            }
-        });
+        function stickerInjector() {
+            const divStiker = document.getElementById('sticker');
 
-        function loadImage(file) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                const img = new Image();
-                img.onload = () => {
-                    overlayImages.push(img);
-                };
-                img.src = e.target.result;
-            };
-            reader.readAsDataURL(file);
+            stickers.forEach(url => {
+                const img = document.createElement('img');
+                img.src = url;
+                img.classList.add('sticker-image');
+                img.addEventListener('click', () => {
+                    toggleImage(url)
+                });
+                divStiker.appendChild(img);
+            });
         }
 
         // Dessiner le flux vidéo et les images superposées sur le canvas
@@ -107,6 +112,8 @@
             };
             draw();
         });
+        window.onload = stickerInjector;
     </script>
 </body>
+
 </html>
