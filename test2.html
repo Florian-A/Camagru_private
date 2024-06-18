@@ -1,54 +1,51 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Injection de Chapeaux</title>
     <style>
-        /* Style facultatif pour le conteneur des chapeaux */
-        #hat {
+        #sticker {
             display: flex;
             justify-content: center;
             align-items: center;
             flex-wrap: wrap;
         }
-        .hat-image {
-            width: 150px; /* Taille des images de chapeaux */
-            margin: 10px; /* Espacement entre les images */
-            cursor: pointer; /* Curseur indiquant que l'image est cliquable */
+
+        .sticker-image {
+            width: 150px;
+            margin: 10px;
+            cursor: pointer;
         }
     </style>
 </head>
+
 <body>
-    <div id="hat"></div>
+    <div id="sticker"></div>
 
     <script>
-        // Tableau d'URLs d'images de chapeaux
-        const chapeaux = [
+        const stickers = [
             'hat1.png',
             'hat2.png',
-            // Ajoutez autant d'URLs d'images que nécessaire
+            'hat3.png',
+            'hat4.png',
         ];
 
-        // Fonction pour injecter les images de chapeaux dans la div
-        function injecterChapeaux() {
-            const divHat = document.getElementById('hat');
-            
-            // Parcourir le tableau d'URLs et créer les éléments d'image
-            chapeaux.forEach(url => {
+        function stickerInjector() {
+            const divStiker = document.getElementById('sticker');
+
+            stickers.forEach(url => {
                 const img = document.createElement('img');
                 img.src = url;
-                img.alt = 'Chapeau';
-                img.classList.add('hat-image'); // Ajouter une classe pour le style CSS
+                img.classList.add('sticker-image');
                 img.addEventListener('click', () => {
-                    alert(url); // Afficher l'URL du chapeau dans une alerte
+                    alert(url);
                 });
-                divHat.appendChild(img);
+                divStiker.appendChild(img);
             });
         }
-
-        // Appeler la fonction d'injection au chargement de la page
-        window.onload = injecterChapeaux;
+        window.onload = stickerInjector;
     </script>
 </body>
+
 </html>
