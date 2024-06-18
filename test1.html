@@ -13,12 +13,16 @@
             aspect-ratio: 640 / 480;
             border: 1px solid black;
         }
+        .imageButton {
+            margin: 5px;
+        }
     </style>
 </head>
 <body>
     <input type="file" id="imageInput" accept="image/*">
-    <button id="selectImage1">Sélectionner Image 1</button>
-    <button id="selectImage2">Sélectionner Image 2</button>
+    <button class="imageButton" id="selectImage1">Sélectionner Image 1</button>
+    <button class="imageButton" id="selectImage2">Sélectionner Image 2</button>
+    <button class="imageButton" id="deselectImage">Désélectionner</button>
     <video id="videoElement" autoplay></video>
     <canvas id="canvasElement"></canvas>
 
@@ -27,7 +31,10 @@
         const canvas = document.getElementById('canvasElement');
         const context = canvas.getContext('2d');
         const imageInput = document.getElementById('imageInput');
-        let overlayImage = null;
+        const selectImage1Button = document.getElementById('selectImage1');
+        const selectImage2Button = document.getElementById('selectImage2');
+        const deselectButton = document.getElementById('deselectImage');
+        let overlayImages = [];
 
         // Demander l'accès à la webcam
         navigator.mediaDevices.getUserMedia({ video: true })
@@ -38,7 +45,35 @@
                 console.error('Erreur d\'accès à la webcam :', error);
             });
 
-        // Charger l'image sélectionnée par l'utilisateur
+        // Gestion des boutons pour sélectionner les images préchargées
+        selectImage1Button.addEventListener('click', () => {
+            toggleImage('hat1.png'); // Remplacez 'hat1.png' par le chemin de votre première image
+        });
+
+        selectImage2Button.addEventListener('click', () => {
+            toggleImage('hat2.png'); // Remplacez 'hat2.png' par le chemin de votre deuxième image
+        });
+
+        // Désélectionner l'image actuellement superposée
+        deselectButton.addEventListener('click', () => {
+            overlayImages = [];
+        });
+
+        // Fonction pour charger une image à partir d'une source spécifiée et la superposer ou la retirer du canvas
+        function toggleImage(source) {
+            const img = new Image();
+            img.onload = () => {
+                const index = overlayImages.findIndex(image => image.src === img.src);
+                if (index !== -1) {
+                    overlayImages.splice(index, 1); // Retirer l'image si elle est déjà superposée
+                } else {
+                    overlayImages.push(img); // Ajouter l'image à superposer
+                }
+            };
+            img.src = source;
+        }
+
+        // Fonction pour charger une image à partir d'un fichier sélectionné
         imageInput.addEventListener('change', (event) => {
             const file = event.target.files[0];
             if (file) {
@@ -46,49 +81,26 @@
             }
         });
 
-        // Gestion des boutons pour sélectionner les images préchargées
-        document.getElementById('selectImage1').addEventListener('click', () => {
-            toggleImage('hat1.png'); // Remplacez 'image1.jpg' par le chemin de votre première image
-        });
-
-        document.getElementById('selectImage2').addEventListener('click', () => {
-            toggleImage('hat2.png'); // Remplacez 'image2.jpg' par le chemin de votre deuxième image
-        });
-
-        // Fonction pour charger une image à partir d'une source spécifiée et la superposer ou la retirer du canvas
-        function toggleImage(source) {
-            const img = new Image();
-            img.onload = () => {
-                if (overlayImage && overlayImage.src === img.src) {
-                    overlayImage = null; // Si l'image actuelle est la même que celle sélectionnée, la retirer
-                } else {
-                    overlayImage = img; // Sinon, charger et superposer l'image sélectionnée
-                }
-            };
-            img.src = source;
-        }
-
-        // Fonction pour charger une image à partir d'un fichier sélectionné
         function loadImage(file) {
             const reader = new FileReader();
             reader.onload = (e) => {
                 const img = new Image();
                 img.onload = () => {
-                    overlayImage = img;
+                    overlayImages.push(img);
                 };
                 img.src = e.target.result;
             };
             reader.readAsDataURL(file);
         }
 
-        // Dessiner le flux vidéo et l'image superposée sur le canvas
+        // Dessiner le flux vidéo et les images superposées sur le canvas
         video.addEventListener('play', () => {
             const draw = () => {
                 if (video.paused || video.ended) return;
                 context.drawImage(video, 0, 0, canvas.width, canvas.height);
-                if (overlayImage) {
-                    context.drawImage(overlayImage, 0, 0, canvas.width, canvas.height);
-                }
+                overlayImages.forEach(img => {
+                    context.drawImage(img, 0, 0, canvas.width, canvas.height);
+                });
                 requestAnimationFrame(draw);
             };
             draw();
