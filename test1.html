@@ -17,6 +17,8 @@
 </head>
 <body>
     <input type="file" id="imageInput" accept="image/*">
+    <button id="selectImage1">Sélectionner Image 1</button>
+    <button id="selectImage2">Sélectionner Image 2</button>
     <video id="videoElement" autoplay></video>
     <canvas id="canvasElement"></canvas>
 
@@ -40,17 +42,44 @@
         imageInput.addEventListener('change', (event) => {
             const file = event.target.files[0];
             if (file) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    const img = new Image();
-                    img.onload = () => {
-                        overlayImage = img;
-                    };
-                    img.src = e.target.result;
-                };
-                reader.readAsDataURL(file);
+                loadImage(file);
             }
         });
+
+        // Gestion des boutons pour sélectionner les images préchargées
+        document.getElementById('selectImage1').addEventListener('click', () => {
+            toggleImage('hat1.png'); // Remplacez 'image1.jpg' par le chemin de votre première image
+        });
+
+        document.getElementById('selectImage2').addEventListener('click', () => {
+            toggleImage('hat2.png'); // Remplacez 'image2.jpg' par le chemin de votre deuxième image
+        });
+
+        // Fonction pour charger une image à partir d'une source spécifiée et la superposer ou la retirer du canvas
+        function toggleImage(source) {
+            const img = new Image();
+            img.onload = () => {
+                if (overlayImage && overlayImage.src === img.src) {
+                    overlayImage = null; // Si l'image actuelle est la même que celle sélectionnée, la retirer
+                } else {
+                    overlayImage = img; // Sinon, charger et superposer l'image sélectionnée
+                }
+            };
+            img.src = source;
+        }
+
+        // Fonction pour charger une image à partir d'un fichier sélectionné
+        function loadImage(file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const img = new Image();
+                img.onload = () => {
+                    overlayImage = img;
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
 
         // Dessiner le flux vidéo et l'image superposée sur le canvas
         video.addEventListener('play', () => {
