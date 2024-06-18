@@ -9,8 +9,10 @@ services:
       - "80:80"
     env_file:
       - .env
+    volumes:
+      - frontend:/var/www/localhost/:rw
     networks:
-      - inception_network
+      - camagru_network
 volumes:
   frontend:
     driver: local
@@ -19,4 +21,4 @@ volumes:
       device: ./frontend/public/
       o: bind
 networks:
-  inception_network:
+  camagru_network:
