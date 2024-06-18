@@ -1,16 +1,30 @@
 version: '3.8'
 services:
-  nginx_static:
+  frontend:
     build:
       context: ./frontend/
     container_name: frontend
     restart: always
     ports:
-      - "80:80"
+      - "90:80"
     env_file:
       - .env
     volumes:
-      - frontend:/var/www/localhost/:rw
+      - frontend:/var/www/html/:rw
+    networks:
+      - camagru_network
+  backend:
+    build:
+      context: ./backend/
+    container_name: backend
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    env_file:
+      - .env
+    volumes:
+      - backend:/var/www/html/:rw
     networks:
       - camagru_network
 volumes:
@@ -19,6 +33,12 @@ volumes:
     driver_opts:
       type: none
       device: ./frontend/public/
+      o: bind
+  backend:
+    driver: local
+    driver_opts:
+      type: none
+      device: ./backend/public/
       o: bind
 networks:
   camagru_network:

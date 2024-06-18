@@ -5,7 +5,7 @@ server {
 
     server_name localhost;
 
-    root /var/www/localhost;
+    root /var/www/html;
     index index.html index.htm;
 
     location / {
