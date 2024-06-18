@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Injection de Chapeaux</title>
+    <style>
+        /* Style facultatif pour le conteneur des chapeaux */
+        #hat {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .hat-image {
+            width: 150px; /* Taille des images de chapeaux */
+            margin: 10px; /* Espacement entre les images */
+            cursor: pointer; /* Curseur indiquant que l'image est cliquable */
+        }
+    </style>
+</head>
+<body>
+    <div id="hat"></div>
+
+    <script>
+        // Tableau d'URLs d'images de chapeaux
+        const chapeaux = [
+            'hat1.png',
+            'hat2.png',
+            // Ajoutez autant d'URLs d'images que nécessaire
+        ];
+
+        // Fonction pour injecter les images de chapeaux dans la div
+        function injecterChapeaux() {
+            const divHat = document.getElementById('hat');
+            
+            // Parcourir le tableau d'URLs et créer les éléments d'image
+            chapeaux.forEach(url => {
+                const img = document.createElement('img');
+                img.src = url;
+                img.alt = 'Chapeau';
+                img.classList.add('hat-image'); // Ajouter une classe pour le style CSS
+                img.addEventListener('click', () => {
+                    alert(url); // Afficher l'URL du chapeau dans une alerte
+                });
+                divHat.appendChild(img);
+            });
+        }
+
+        // Appeler la fonction d'injection au chargement de la page
+        window.onload = injecterChapeaux;
+    </script>
+</body>
+</html>

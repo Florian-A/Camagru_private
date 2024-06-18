@@ -35,6 +35,7 @@
         const selectImage2Button = document.getElementById('selectImage2');
         const deselectButton = document.getElementById('deselectImage');
         let overlayImages = [];
+        const images = ['hat1.png', 'hat2.png'];
 
         // Demander l'accès à la webcam
         navigator.mediaDevices.getUserMedia({ video: true })
@@ -45,6 +46,7 @@
                 console.error('Erreur d\'accès à la webcam :', error);
             });
 
+        
         // Gestion des boutons pour sélectionner les images préchargées
         selectImage1Button.addEventListener('click', () => {
             toggleImage('hat1.png'); // Remplacez 'hat1.png' par le chemin de votre première image
