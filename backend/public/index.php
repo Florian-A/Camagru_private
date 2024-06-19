@@ -1,5 +1,7 @@
 <?php
 
-phpinfo();
+header('Content-Type: application/json');
 
-?>
+require 'router.php';
+
+routeRequest();

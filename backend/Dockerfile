@@ -7,4 +7,4 @@ RUN echo $DOMAIN
 RUN apt-get update -yqq && apt-get upgrade -yqq && \
     DEBIAN_FRONTEND=noninteractive
 
-EXPOSE 80 443
+RUN a2enmod rewrite
