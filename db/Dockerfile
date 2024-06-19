@@ -10,6 +10,7 @@ ENV MYSQL_USER ${DB_USER}
 ENV MYSQL_PASSWORD ${DB_PASSWORD}
 ENV MYSQL_ROOT_PASSWORD ${DB_ROOT_PASSWORD}
 
-COPY schema.sql /docker-entrypoint-initdb.d/
+COPY 00-schema.sql /docker-entrypoint-initdb.d/
+COPY 01-insert.sql /docker-entrypoint-initdb.d/
 
 CMD ["--character-set-server=utf8mb4", "--collation-server=utf8mb4_general_ci", "--skip-character-set-client-handshake"]

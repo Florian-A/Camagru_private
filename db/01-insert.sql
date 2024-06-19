@@ -1,0 +1,4 @@
+INSERT INTO sticker (imagePath) VALUES ('8cfd338e067899e5569d58403559ea112d4edb83f24a6504cf97b9b3c8f7d50e.png');
+INSERT INTO sticker (imagePath) VALUES ('59febe71222734b2dd6bbfe0124e4a109f2daebedb751b16ad09090493f3c280.png');
+INSERT INTO sticker (imagePath) VALUES ('1433dde026cd35fdc2b556bafee4a11174e913511e7b626f04f7afbd41f68232.png');
+INSERT INTO sticker (imagePath) VALUES ('99765ec5a45a1175f5d8a64bec24298a5a2438a4be2c9e5790dc34d5d9a17b49.png');
