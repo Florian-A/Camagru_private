@@ -6,11 +6,11 @@ services:
     container_name: frontend
     restart: always
     ports:
-      - "90:90"
+      - "90:80"
     env_file:
       - .env
     volumes:
-      - frontend:/var/www/html/:rw
+      - frontend:/usr/share/nginx/html:rw
     networks:
       - camagru_network
   backend:
