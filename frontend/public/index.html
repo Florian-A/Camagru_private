@@ -1,1 +1,119 @@
-test
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canvas avec Superposition d'Images</title>
+    <style>
+        #videoElement {
+            display: none;
+        }
+
+        #canvasElement {
+            width: 640px;
+            aspect-ratio: 640 / 480;
+            border: 1px solid black;
+        }
+
+        .imageButton {
+            margin: 5px;
+        }
+
+        #sticker {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .sticker-image {
+            width: 150px;
+            margin: 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    
+    <video id="videoElement" autoplay></video>
+    <canvas id="canvasElement"></canvas>
+    <div id="sticker"></div>
+    <button class="imageButton" id="deselectImage">Désélectionner</button>
+
+    <script>
+        const video = document.getElementById('videoElement');
+        const canvas = document.getElementById('canvasElement');
+        const context = canvas.getContext('2d');
+        const imageInput = document.getElementById('imageInput');
+        const deselectButton = document.getElementById('deselectImage');
+        let overlayImages = [];
+
+        const stickers = [
+            'hat1.png',
+            'hat2.png',
+            'hat3.png',
+            'hat4.png',
+        ];
+
+        // Demander l'accès à la webcam
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then((stream) => {
+                video.srcObject = stream;
+            })
+            .catch((error) => {
+                console.error('Erreur d\'accès à la webcam :', error);
+            });
+
+
+        // Désélectionner l'image actuellement superposée
+        deselectButton.addEventListener('click', () => {
+            overlayImages = [];
+        });
+
+        // Fonction pour charger une image à partir d'une source spécifiée et la superposer ou la retirer du canvas
+        function toggleImage(source) {
+            const img = new Image();
+            img.onload = () => {
+                const index = overlayImages.findIndex(image => image.src === img.src);
+                if (index !== -1) {
+                    overlayImages.splice(index, 1); // Retirer l'image si elle est déjà superposée
+                } else {
+                    overlayImages.push(img); // Ajouter l'image à superposer
+                }
+            };
+            img.src = source;
+        }
+
+        function stickerInjector() {
+            const divStiker = document.getElementById('sticker');
+
+            stickers.forEach(url => {
+                const img = document.createElement('img');
+                img.src = url;
+                img.classList.add('sticker-image');
+                img.addEventListener('click', () => {
+                    toggleImage(url)
+                });
+                divStiker.appendChild(img);
+            });
+        }
+
+        // Dessiner le flux vidéo et les images superposées sur le canvas
+        video.addEventListener('play', () => {
+            const draw = () => {
+                if (video.paused || video.ended) return;
+                context.drawImage(video, 0, 0, canvas.width, canvas.height);
+                overlayImages.forEach(img => {
+                    context.drawImage(img, 0, 0, canvas.width, canvas.height);
+                });
+                requestAnimationFrame(draw);
+            };
+            draw();
+        });
+        window.onload = stickerInjector;
+    </script>
+</body>
+
+</html>
