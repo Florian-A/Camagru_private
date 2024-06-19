@@ -24,6 +24,7 @@ services:
       - .env
     volumes:
       - backend:/var/www/html/:rw
+      - static:/var/www/html/static/:rw
     networks:
       - camagru_network
   db:
@@ -63,6 +64,12 @@ volumes:
     driver_opts:
       type: none
       device: ./backend/public/
+      o: bind
+  static:
+    driver: local
+    driver_opts:
+      type: none
+      device: ./backend/static/
       o: bind
 networks:
   camagru_network:

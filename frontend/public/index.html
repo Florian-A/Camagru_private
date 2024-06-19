@@ -46,16 +46,8 @@
         const video = document.getElementById('videoElement');
         const canvas = document.getElementById('canvasElement');
         const context = canvas.getContext('2d');
-        const imageInput = document.getElementById('imageInput');
         const deselectButton = document.getElementById('deselectImage');
         let overlayImages = [];
-
-        const stickers = [
-            'hat1.png',
-            'hat2.png',
-            'hat3.png',
-            'hat4.png',
-        ];
 
         // Demander l'accès à la webcam
         navigator.mediaDevices.getUserMedia({ video: true })
@@ -65,7 +57,6 @@
             .catch((error) => {
                 console.error('Erreur d\'accès à la webcam :', error);
             });
-
 
         // Désélectionner l'image actuellement superposée
         deselectButton.addEventListener('click', () => {
@@ -86,18 +77,29 @@
             img.src = source;
         }
 
-        function stickerInjector() {
+        async function stickerInjector() {
             const divStiker = document.getElementById('sticker');
 
-            stickers.forEach(url => {
-                const img = document.createElement('img');
-                img.src = url;
-                img.classList.add('sticker-image');
-                img.addEventListener('click', () => {
-                    toggleImage(url)
-                });
-                divStiker.appendChild(img);
-            });
+            try {
+                const response = await fetch('http://localhost/api/sticker/all/');
+                const data = await response.json();
+
+                if (data.status === 'success') {
+                    data.data.forEach(sticker => {
+                        const img = document.createElement('img');
+                        img.src = sticker.imagePath;
+                        img.classList.add('sticker-image');
+                        img.addEventListener('click', () => {
+                            toggleImage(sticker.imagePath);
+                        });
+                        divStiker.appendChild(img);
+                    });
+                } else {
+                    console.error('Error:', data);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
         }
 
         // Dessiner le flux vidéo et les images superposées sur le canvas
