@@ -3,6 +3,11 @@ services:
   frontend:
     build:
       context: ./frontend/
+      args:
+      - DB_NAME
+      - DB_USER
+      - DB_PASSWORD
+      - DB_ROOT_PASSWORD
     container_name: frontend
     restart: always
     env_file:
@@ -20,6 +25,19 @@ services:
       - .env
     volumes:
       - backend:/var/www/html/:rw
+    networks:
+      - camagru_network
+  db:
+    build:
+      context: ./db
+      args:
+      - DB_NAME
+      - DB_USER
+      - DB_PASSWORD
+    container_name: db
+    restart: always
+    env_file:
+      - .env
     networks:
       - camagru_network
   proxy:
