@@ -41,12 +41,14 @@
     <canvas id="canvasElement"></canvas>
     <div id="sticker"></div>
     <button class="imageButton" id="deselectImage">Désélectionner</button>
+    <button class="imageButton" id="uploadImage">Uploader l'image</button>
 
     <script>
         const video = document.getElementById('videoElement');
         const canvas = document.getElementById('canvasElement');
         const context = canvas.getContext('2d');
         const deselectButton = document.getElementById('deselectImage');
+        const uploadButton = document.getElementById('uploadImage');
         let overlayImages = [];
 
         // Demander l'accès à la webcam
@@ -75,6 +77,32 @@
                 }
             };
             img.src = source;
+        }
+
+        // Fonction pour capturer l'image actuelle du canvas et l'envoyer via POST
+        async function uploadImage() {
+            try {
+                // Capturer l'image du canvas au format base64
+                const imageData = canvas.toDataURL('image/png');
+
+                // Envoyer l'image via une requête POST
+                const response = await fetch('http://localhost/api/image/upload', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ image: imageData })
+                });
+
+                const data = await response.json();
+                console.log('Réponse de l\'upload :', data);
+
+                // Traitez la réponse de l'API selon vos besoins
+                alert('Image uploadée avec succès !');
+            } catch (error) {
+                console.error('Erreur lors de l\'upload de l\'image :', error);
+                alert('Erreur lors de l\'upload de l\'image. Veuillez réessayer.');
+            }
         }
 
         async function stickerInjector() {
@@ -114,6 +142,11 @@
             };
             draw();
         });
+
+        // Écouter le clic sur le bouton d'upload
+        uploadButton.addEventListener('click', uploadImage);
+
+        // Charger les stickers au chargement de la page
         window.onload = stickerInjector;
     </script>
 </body>
