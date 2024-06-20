@@ -7,7 +7,7 @@ class Sticker
         try {
             // Get all stickers from database
             $pdo = Database::getPDO();
-            $stmt = $pdo->query('SELECT * FROM sticker');
+            $stmt = $pdo->query('SELECT * FROM Sticker');
             $stmt->execute();
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 

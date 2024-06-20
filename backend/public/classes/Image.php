@@ -57,7 +57,7 @@ class Image
     private function getStickerPaths($stickersId)
     {
         $pdo = Database::getPDO();
-        $stmt = $pdo->prepare('SELECT imagePath FROM sticker WHERE id IN (' . implode(',', $stickersId) . ')');
+        $stmt = $pdo->prepare('SELECT imagePath FROM Sticker WHERE id IN (' . implode(',', $stickersId) . ')');
         $stmt->execute();
         $result = $stmt->fetchAll(PDO::FETCH_COLUMN);
 
