@@ -36,7 +36,7 @@
 </head>
 
 <body>
-    
+
     <video id="videoElement" autoplay></video>
     <canvas id="canvasElement"></canvas>
     <div id="sticker"></div>
@@ -132,6 +132,9 @@
 
         // Dessiner le flux vidéo et les images superposées sur le canvas
         video.addEventListener('play', () => {
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+
             const draw = () => {
                 if (video.paused || video.ended) return;
                 context.drawImage(video, 0, 0, canvas.width, canvas.height);
@@ -142,7 +145,6 @@
             };
             draw();
         });
-
         // Écouter le clic sur le bouton d'upload
         uploadButton.addEventListener('click', uploadImage);
 
