@@ -9,6 +9,11 @@ function loadContent(page) {
         .then(response => response.text())
         .then(data => {
             document.getElementById('content').innerHTML = data;
+            if (page === 'home') {
+                const script = document.createElement('script');
+                script.src = '/js/webcam.js';
+                document.body.appendChild(script);
+            }
         })
         .catch(error => {
             console.error('Error loading the page:', error);
