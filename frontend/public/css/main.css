@@ -1,0 +1,47 @@
+/* Navi */
+.navbar {
+    background-color: #5855d982;
+    padding: 10px;
+}
+
+.navbar .navbar-brand {
+    color: white;
+    font-family: cursive;
+    font-size: 1.4rem;
+}
+
+.login > form {
+    margin: auto;
+}
+
+.login > .col-ml-auto {
+    margin: auto
+}
+
+/* Webcam */
+#videoElement {
+    display: none;
+}
+
+#canvasElement {
+    width: 640px;
+    aspect-ratio: 640 / 480;
+    border: 1px solid black;
+}
+
+.imageButton {
+    margin: 5px;
+}
+
+#sticker {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.sticker-image {
+    width: 150px;
+    margin: 10px;
+    cursor: pointer;
+}

@@ -12,17 +12,16 @@ function loadContent(page) {
         })
         .catch(error => {
             console.error('Error loading the page:', error);
-            document.getElementById('content').innerHTML = '<p>Erreur lors du chargement de la page.</p>';
+            document.getElementById('content').innerHTML = '<p>Loading page error !</p>';
         });
 }
 
-window.onpopstate = function() {
+window.onpopstate = function () {
     const path = window.location.pathname.split('/')[1];
     loadContent(path);
 };
 
-// Charger le contenu initial en fonction de l'URL actuelle
 document.addEventListener('DOMContentLoaded', () => {
-    const initialPage = window.location.pathname.split('/')[1] || 'page1';
+    const initialPage = window.location.pathname.split('/')[1] || 'home';
     loadContent(initialPage);
 });

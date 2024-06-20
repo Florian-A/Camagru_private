@@ -82,39 +82,39 @@
 
         // Fonction pour capturer l'image actuelle du canvas et l'envoyer via POST
         async function uploadImage() {
-    try {
-        // Créer une copie du canvas sans les stickers
-        const tempCanvas = document.createElement('canvas');
-        tempCanvas.width = canvas.width;
-        tempCanvas.height = canvas.height;
-        const tempContext = tempCanvas.getContext('2d');
-        tempContext.drawImage(video, 0, 0, tempCanvas.width, tempCanvas.height);
+            try {
+                // Créer une copie du canvas sans les stickers
+                const tempCanvas = document.createElement('canvas');
+                tempCanvas.width = canvas.width;
+                tempCanvas.height = canvas.height;
+                const tempContext = tempCanvas.getContext('2d');
+                tempContext.drawImage(video, 0, 0, tempCanvas.width, tempCanvas.height);
 
-        // Capturer l'image du canvas temporaire au format base64
-        const imageData = tempCanvas.toDataURL('image/png');
+                // Capturer l'image du canvas temporaire au format base64
+                const imageData = tempCanvas.toDataURL('image/png');
 
-        // Récupérer les IDs des stickers sélectionnés
-        const selectedStickersIds = overlayStickers.map(img => img.id);
+                // Récupérer les IDs des stickers sélectionnés
+                const selectedStickersIds = overlayStickers.map(img => img.id);
 
-        // Envoyer l'image et les IDs des stickers sélectionnés via une requête POST
-        const response = await fetch('http://localhost/api/image/upload', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ image: imageData, stickersId: selectedStickersIds })
-        });
+                // Envoyer l'image et les IDs des stickers sélectionnés via une requête POST
+                const response = await fetch('http://localhost/api/image/upload', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ image: imageData, stickersId: selectedStickersIds })
+                });
 
-        const data = await response.json();
-        console.log('Réponse de l\'upload :', data);
+                const data = await response.json();
+                console.log('Réponse de l\'upload :', data);
 
-        // Traitez la réponse de l'API selon vos besoins
-        alert('Image uploadée avec succès !');
-    } catch (error) {
-        console.error('Erreur lors de l\'upload de l\'image :', error);
-        alert('Erreur lors de l\'upload de l\'image. Veuillez réessayer.');
-    }
-}
+                // Traitez la réponse de l'API selon vos besoins
+                alert('Image uploadée avec succès !');
+            } catch (error) {
+                console.error('Erreur lors de l\'upload de l\'image :', error);
+                alert('Erreur lors de l\'upload de l\'image. Veuillez réessayer.');
+            }
+        }
 
 
         async function stickerInjector() {
