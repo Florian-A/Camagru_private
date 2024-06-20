@@ -1,64 +1,59 @@
 <?php
 class Image
 {
+    // Upload image and merge with stickers
     public function upload()
     {
+        // Get JSON data
         $json = file_get_contents('php://input');
-
-        // Décoder le JSON
         $data = json_decode($json);
 
         if ($data && isset($data->image)) {
-            // Récupérer les données de l'image
+
+            // Get image data
             $imageData = $data->image;
             $stickersId = $data->stickersId;
 
-            // Supprimer le schéma de données de l'URL (si présent)
+            // Remove data URL scheme part
             $imageData = str_replace('data:image/png;base64,', '', $imageData);
             $imageData = str_replace(' ', '+', $imageData);
 
-            // Convertir les données base64 en binaire
+            // Decode base64 image data
             $imageBinary = base64_decode($imageData);
 
-            // Chemin où sauvegarder l'image (assurez-vous que le répertoire est accessible en écriture)
-            $filePath = './static/'; // Adapter le chemin selon votre configuration
-
-            // Nom de fichier pour l'image (peut être généré de manière unique si nécessaire)
-            $fileName = 'image_' . uniqid() . '.png'; // Adapter l'extension selon le type MIME de l'image
-
-            // Chemin complet du fichier
+            // Save image to file
+            $filePath = './static/'; 
+            $fileName = 'image_' . uniqid() . '.png';
             $fullPath = $filePath . $fileName;
-
-            // Écrire les données de l'image dans le fichier
             $bytesWritten = file_put_contents($fullPath, $imageBinary);
 
             if ($bytesWritten !== false) {
-                // Charger l'image de la webcam
+                
+                // Load webcam image
                 $webcamImage = imagecreatefrompng($fullPath);
-
-                // Récupérer les chemins d'accès des stickers sélectionnés
                 $stickerPaths = $this->getStickerPaths($stickersId);
 
-                // Fusionner les stickers avec l'image de la webcam
+                // Merge webcam image with stickers
                 foreach ($stickerPaths as $stickerPath) {
                     $stickerImage = imagecreatefrompng($stickerPath);
                     imagecopy($webcamImage, $stickerImage, 0, 0, 0, 0, imagesx($stickerImage), imagesy($stickerImage));
                     imagedestroy($stickerImage);
                 }
 
-                // Enregistrer l'image fusionnée
+                // Save merged image
                 imagepng($webcamImage, $fullPath);
                 imagedestroy($webcamImage);
 
-                echo "Image fusionnée et sauvegardée avec succès : $fullPath";
+                return ["status" => "success", "imagePath" => $fullPath];
             } else {
-                echo "Erreur lors de la sauvegarde de l'image.";
+                return ["status" => "error", "message" => "Failed to save image to file."];
             }
         } else {
-            echo "Erreur : Données d'image non trouvées dans la requête.";
+            return ["status" => "error", "message" => "Invalid image data."];
         }
     }
 
+    // Get sticker paths from database
     private function getStickerPaths($stickersId)
     {
         $pdo = Database::getPDO();

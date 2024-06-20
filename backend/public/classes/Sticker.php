@@ -1,14 +1,17 @@
 <?php
 class Sticker
 {
+    // Get all stickers
     public function all()
     {
         try {
+            // Get all stickers from database
             $pdo = Database::getPDO();
             $stmt = $pdo->query('SELECT * FROM sticker');
             $stmt->execute();
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+            // Return stickers data
             if ($result !== false) {
                 foreach ($result as &$sticker) {
                     if (isset($sticker['imagePath'])) {

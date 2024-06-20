@@ -1,15 +1,16 @@
 <?php
 class Test {
 
-    // a simple method that returns a message
+    // Simple method that returns a message
     public function helloWorld() {
         return ["status" => "success", "message" => "Hello World!"];
     }
 
-    // a method that tests the database connection
+    // Method that tests the database connection
     public function database()
     {
         try {
+            // Test database connection
             $pdo = Database::getPDO();
             $stmt = $pdo->query('SELECT 1');
             $stmt->execute();
