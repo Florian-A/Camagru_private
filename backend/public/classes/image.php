@@ -31,13 +31,14 @@ class Image
                 
                 // Load webcam image
                 $webcamImage = imagecreatefrompng($fullPath);
-                $stickerPaths = $this->getStickerPaths($stickersId);
-
-                // Merge webcam image with stickers
-                foreach ($stickerPaths as $stickerPath) {
-                    $stickerImage = imagecreatefrompng($stickerPath);
-                    imagecopy($webcamImage, $stickerImage, 0, 0, 0, 0, imagesx($stickerImage), imagesy($stickerImage));
-                    imagedestroy($stickerImage);
+                if (!empty($stickersId)) {
+                    $stickerPaths = $this->getStickerPaths($stickersId);
+                    // Merge webcam image with stickers
+                    foreach ($stickerPaths as $stickerPath) {
+                        $stickerImage = imagecreatefrompng($stickerPath);
+                        imagecopy($webcamImage, $stickerImage, 0, 0, 0, 0, imagesx($stickerImage), imagesy($stickerImage));
+                        imagedestroy($stickerImage);
+                    }
                 }
 
                 // Save merged image

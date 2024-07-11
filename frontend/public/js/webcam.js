@@ -52,11 +52,8 @@ if (typeof video === 'undefined') {
             // Récupérer les IDs des stickers sélectionnés
             const selectedStickersIds = overlayStickers.map(img => img.id);
 
-            console.log(imageData);
-            console.log(selectedStickersIds);
-
             // Envoyer l'image et les IDs des stickers sélectionnés via une requête POST
-            const response = await fetch('http://localhost:8080/api/image/upload/', {
+            const response = await fetch('./api/image/upload/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
