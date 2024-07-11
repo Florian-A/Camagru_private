@@ -28,6 +28,10 @@ function loadContent(page) {
                 const script = document.createElement('script');
                 script.src = '/js/register.js';
                 document.body.appendChild(script);
+            } else if (page === 'login') {
+                const script = document.createElement('script');
+                script.src = '/js/login.js';
+                document.body.appendChild(script);
             }
         })
         .catch(error => {

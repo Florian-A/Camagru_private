@@ -1,21 +1,22 @@
-if (typeof registerForm === 'undefined') {
+if (typeof loginForm === 'undefined') {
 
-    const registerForm = document.getElementById('registerForm');
+    const loginForm = document.getElementById('loginForm');
     const messageElement = document.getElementById('message');
 
-    registerForm.addEventListener('submit', async (event) => {
+    console.log('test');
+
+    loginForm.addEventListener('submit', async (event) => {
         event.preventDefault();
 
-        const email = document.getElementById('email').value;
         const username = document.getElementById('username').value;
         const password = document.getElementById('password').value;
 
-        const response = await fetch('./api/account/register/', {
+        const response = await fetch('./api/account/login/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ email, username, password })
+            body: JSON.stringify({ username, password })
         });
 
         const data = await response.json();
