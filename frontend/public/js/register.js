@@ -1,4 +1,5 @@
 const form = document.getElementById('registerForm');
+const messageElement = document.getElementById('message');
 
 form.addEventListener('submit', async (event) => {
     event.preventDefault();
@@ -16,5 +17,7 @@ form.addEventListener('submit', async (event) => {
     });
 
     const data = await response.json();
-    console.log(data);
+    messageElement.textContent = data.message;
+    messageElement.classList.remove('text-success', 'text-error');
+    messageElement.classList.add(data.status === 'success' ? 'text-success' : 'text-error');
 });
