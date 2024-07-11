@@ -7,52 +7,52 @@ if (typeof video === 'undefined') {
     const uploadButton = document.getElementById('uploadImage');
     let overlayStickers = [];
 
-    // Demander l'accès à la webcam
+    // Request access to the webcam
     navigator.mediaDevices.getUserMedia({ video: true })
         .then((stream) => {
             video.srcObject = stream;
         })
         .catch((error) => {
-            console.error('Erreur d\'accès à la webcam :', error);
+            console.error('Webcam access error:', error);
         });
 
-    // Désélectionner l'image actuellement superposée
+    // Deselect the currently overlaid image
     deselectButton.addEventListener('click', () => {
         overlayStickers = [];
     });
 
-    // Fonction pour charger une image à partir d'une source spécifiée et la superposer ou la retirer du canvas
+    // Function to load an image from a specified source and overlay or remove it from the canvas
     function toggleImage(source, id) {
         const img = new Image();
-        img.id = id; // Ajouter l'ID de l'image à l'objet Image
+        img.id = id;
         img.onload = () => {
             const index = overlayStickers.findIndex(image => image.src === img.src);
             if (index !== -1) {
-                overlayStickers.splice(index, 1); // Retirer l'image si elle est déjà superposée
+                overlayStickers.splice(index, 1);
             } else {
-                overlayStickers.push(img); // Ajouter l'image à superposer
+                overlayStickers.push(img);
             }
         };
         img.src = source;
     }
 
-    // Fonction pour capturer l'image actuelle du canvas et l'envoyer via POST
+    // Function to capture the current image from the canvas and send it via POST
     async function uploadImage() {
         try {
-            // Créer une copie du canvas sans les stickers
+            // Create a copy of the canvas without the stickers
             const tempCanvas = document.createElement('canvas');
             tempCanvas.width = canvas.width;
             tempCanvas.height = canvas.height;
             const tempContext = tempCanvas.getContext('2d');
             tempContext.drawImage(video, 0, 0, tempCanvas.width, tempCanvas.height);
 
-            // Capturer l'image du canvas temporaire au format base64
+            // Capture the image from the temporary canvas in base64 format
             const imageData = tempCanvas.toDataURL('image/png');
 
-            // Récupérer les IDs des stickers sélectionnés
+            // Get the IDs of the selected stickers
             const selectedStickersIds = overlayStickers.map(img => img.id);
 
-            // Envoyer l'image et les IDs des stickers sélectionnés via une requête POST
+            // Send the image and the IDs of the selected stickers via a POST request
             const response = await fetch('./api/image/upload/', {
                 method: 'POST',
                 headers: {
@@ -63,15 +63,15 @@ if (typeof video === 'undefined') {
 
             const data = await response.json();
             if (data.status === "error") {
-                console.error('Erreur lors de l\'upload de l\'image :', data.message);
-                alert('Erreur lors de l\'upload de l\'image : ' + data.message);
+                console.error('Image upload error:', data.message);
+                alert('Image upload error: ' + data.message);
             } else {
-                console.log('Réponse de l\'upload :', data);
-                alert('Image uploadée avec succès !');
+                console.log('Upload response:', data);
+                alert('Image uploaded successfully!');
             }
         } catch (error) {
-            console.error('Erreur lors de l\'upload de l\'image :', error);
-            alert('Erreur lors de l\'upload de l\'image. Veuillez réessayer.');
+            console.error('Image upload error:', error);
+            alert('Image upload error. Please try again.');
         }
     }
 
@@ -88,7 +88,7 @@ if (typeof video === 'undefined') {
                     img.src = sticker.imagePath;
                     img.classList.add('sticker-image');
                     img.addEventListener('click', () => {
-                        toggleImage(sticker.imagePath, sticker.id); // Passer l'ID de l'image en tant que deuxième argument
+                        toggleImage(sticker.imagePath, sticker.id);
                     });
                     divStiker.appendChild(img);
                 });
@@ -100,7 +100,7 @@ if (typeof video === 'undefined') {
         }
     }
 
-    // Dessiner le flux vidéo et les images superposées sur le canvas
+    // Draw the video stream and the overlaid images on the canvas
     video.addEventListener('play', () => {
         canvas.width = video.videoWidth;
         canvas.height = video.videoHeight;
@@ -115,10 +115,10 @@ if (typeof video === 'undefined') {
         };
         draw();
     });
-    // Écouter le clic sur le bouton d'upload
+    // Listen for the upload button click
     uploadButton.addEventListener('click', uploadImage);
 
-    // Charger les stickers au chargement de la page
+    // Load the stickers when the page loads
     window.onload = stickerInjector();
 
 }
