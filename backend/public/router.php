@@ -40,6 +40,7 @@ function routeRequest()
 
     // call the method and return the result
     $result = $instance->$methodName();
+    
     echo json_encode($result);
 }
 

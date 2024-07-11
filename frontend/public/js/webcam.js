@@ -53,7 +53,7 @@ if (typeof video === 'undefined') {
             const selectedStickersIds = overlayStickers.map(img => img.id);
 
             // Envoyer l'image et les IDs des stickers sélectionnés via une requête POST
-            const response = await fetch('http://localhost/api/image/upload', {
+            const response = await fetch(`/api/image/upload`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -76,7 +76,7 @@ if (typeof video === 'undefined') {
         const divStiker = document.getElementById('sticker');
 
         try {
-            const response = await fetch('http://localhost/api/sticker/all/');
+            const response = await fetch(`/api/sticker/all/`);
             const data = await response.json();
 
             if (data.status === 'success') {
@@ -116,7 +116,6 @@ if (typeof video === 'undefined') {
     uploadButton.addEventListener('click', uploadImage);
 
     // Charger les stickers au chargement de la page
-    window.onload = stickerInjector;
-
+    window.onload = stickerInjector();
 
 }
