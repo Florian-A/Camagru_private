@@ -52,8 +52,11 @@ if (typeof video === 'undefined') {
             // Récupérer les IDs des stickers sélectionnés
             const selectedStickersIds = overlayStickers.map(img => img.id);
 
+            console.log(imageData);
+            console.log(selectedStickersIds);
+
             // Envoyer l'image et les IDs des stickers sélectionnés via une requête POST
-            const response = await fetch(`/api/image/upload`, {
+            const response = await fetch('http://localhost:8080/api/image/upload/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -62,10 +65,13 @@ if (typeof video === 'undefined') {
             });
 
             const data = await response.json();
-            console.log('Réponse de l\'upload :', data);
-
-            // Traitez la réponse de l'API selon vos besoins
-            alert('Image uploadée avec succès !');
+            if (data.status === "error") {
+                console.error('Erreur lors de l\'upload de l\'image :', data.message);
+                alert('Erreur lors de l\'upload de l\'image : ' + data.message);
+            } else {
+                console.log('Réponse de l\'upload :', data);
+                alert('Image uploadée avec succès !');
+            }
         } catch (error) {
             console.error('Erreur lors de l\'upload de l\'image :', error);
             alert('Erreur lors de l\'upload de l\'image. Veuillez réessayer.');

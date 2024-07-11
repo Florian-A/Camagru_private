@@ -22,7 +22,7 @@ class Image
             $imageBinary = base64_decode($imageData);
 
             // Save image to file
-            $filePath = './static/'; 
+            $filePath = getcwd() . '/static/'; 
             $fileName = 'image_' . uniqid() . '.png';
             $fullPath = $filePath . $fileName;
             $bytesWritten = file_put_contents($fullPath, $imageBinary);
