@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS User (
     username VARCHAR(50) NOT NULL,
     email VARCHAR(100) NOT NULL UNIQUE,
     passwordHash VARCHAR(255) NOT NULL,
-    isAuthenticated BOOLEAN NOT NULL DEFAULT FALSE,
+    isActiveted BOOLEAN NOT NULL DEFAULT FALSE,
     activationHash VARCHAR(255) NOT NULL
 );
 
