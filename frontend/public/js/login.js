@@ -1,6 +1,6 @@
 if (typeof loginForm === 'undefined') {
 
-    const loginForm = document.getElementById('loginForm');
+    const loginForm = document.getElementById('login');
     const messageElement = document.getElementById('message');
 
     console.log('test');
@@ -8,15 +8,15 @@ if (typeof loginForm === 'undefined') {
     loginForm.addEventListener('submit', async (event) => {
         event.preventDefault();
 
-        const username = document.getElementById('username').value;
+        const email = document.getElementById('email').value;
         const password = document.getElementById('password').value;
 
-        const response = await fetch('./api/account/login/', {
+        const response = await fetch('/api/account/login/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ username, password })
+            body: JSON.stringify({ email, password })
         });
 
         const data = await response.json();

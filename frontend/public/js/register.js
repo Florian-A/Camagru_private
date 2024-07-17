@@ -1,6 +1,6 @@
 if (typeof registerForm === 'undefined') {
 
-    const registerForm = document.getElementById('registerForm');
+    const registerForm = document.getElementById('register');
     const messageElement = document.getElementById('message');
 
     registerForm.addEventListener('submit', async (event) => {
@@ -10,7 +10,7 @@ if (typeof registerForm === 'undefined') {
         const username = document.getElementById('username').value;
         const password = document.getElementById('password').value;
 
-        const response = await fetch('./api/account/register/', {
+        const response = await fetch('/api/account/register/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
