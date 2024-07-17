@@ -56,7 +56,7 @@ class Account
     
         if ($user && password_verify($data->password, $user['passwordHash'])) {
             // Check if the user is authenticated
-            if ($user['isActiveted'] === false) { // todo delete false
+            if ($user['isActiveted'] === 0) { // todo delete false
                 return ["status" => "success", "message" => "Login successful."];
             } else {
                 return ["status" => "error", "message" => "Account is not activated. Please check your email to activate your account."];
