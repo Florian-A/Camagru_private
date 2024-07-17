@@ -24,4 +24,8 @@ class Test {
             return ["status" => "error", "message" => "Database connection error: " . $e->getMessage()];
         }
     }
+
+    public function secureAccess() {
+        
+    }
 }
