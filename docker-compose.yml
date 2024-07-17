@@ -3,10 +3,6 @@ services:
   frontend:
     build:
       context: ./frontend/
-      args:
-      - DB_NAME
-      - DB_USER
-      - DB_PASSWORD
     container_name: frontend
     restart: always
     env_file:

@@ -1,4 +1,7 @@
 <?php
+
+require_once 'jwt.php';
+
 class Account
 {
     public function register()
@@ -57,7 +60,18 @@ class Account
         if ($user && password_verify($data->password, $user['passwordHash'])) {
             // Check if the user is authenticated
             if ($user['isActiveted'] === 0) { // todo delete false
-                return ["status" => "success", "message" => "Login successful."];
+
+                // Activate cross import
+                $jwt = new JWT(1);
+                $payload = json_encode(
+                    [
+                        "iat" => time(),
+                        "exp" => time() + (60 * 60),
+                        "userId" => $user['id']
+                    ]
+                );
+                $token = $jwt->createJWT($payload);
+                return ["status" => "success", "message" => "Login successful.", "token" => $token];
             } else {
                 return ["status" => "error", "message" => "Account is not activated. Please check your email to activate your account."];
             }
