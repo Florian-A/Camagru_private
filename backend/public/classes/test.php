@@ -1,6 +1,6 @@
 <?php
 
-require_once 'jwt.php';
+require_once './jwt.php';
 
 class Test {
 
