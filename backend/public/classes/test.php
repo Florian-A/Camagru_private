@@ -25,7 +25,14 @@ class Test {
         }
     }
 
-    public function secureAccess() {
-        
+    public function secureAccess($token) {
+
+        $headers = getallheaders();
+
+        if (isset($headers['Authorization']) && preg_match('/Bearer\s(\S+)/', $headers['Authorization'], $matches)) {
+            $token = $matches[1];
+        }
+
+        return ["status" => "test", "message" => "test", "token" => $token];
     }
 }
