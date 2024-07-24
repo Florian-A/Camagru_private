@@ -73,16 +73,9 @@ class JWT
             return 0;
         }
 
-        [$dummy, $payload, $dummy] = array_map([$this, 'base64UrlDecode'], explode(".", $token));
-
+        $payload = array_map([$this, 'base64UrlDecode'], explode(".", $token))[1];
         $payloadObj = json_decode($payload);
-        if (isset($payloadObj)) {
-            return $payloadObj->userId;
-        } else {
-            return 0;
-        }
+
+        return $payloadObj->userId ?? 0;
     }
-    
-    
-    
 }
