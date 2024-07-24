@@ -41,13 +41,16 @@ function routeRequest()
     // call the method and return the result
 
     $headers = getallheaders();
-
     if (isset($headers['Authorization']) && preg_match('/Bearer\s(\S+)/', $headers['Authorization'], $matches)) {
         $token = $matches[1];
     }
 
     // call the method and return the result
-    $result = $instance->$methodName();
+    if (isset($token)) {
+        $result = $instance->$methodName($token);
+    } else {
+        $result = $instance->$methodName();
+    }
     
     echo json_encode($result);
 }

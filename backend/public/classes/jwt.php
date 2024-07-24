@@ -18,7 +18,7 @@ class JWT
         return base64_decode(strtr($data, '-_,', '+/='));
     }
 
-    public function createJWT($payload = 0)
+    public function create($payload = 0)
     {
         if ($this->crossImport === 0) {
             return 0;
@@ -48,5 +48,41 @@ class JWT
         return $signature;
     }
 
+    private function verify($token = null) {
+
+        // If the token is null or doesn't have 3 parts, return 0
+        if ($token === null || count(explode(".", $token)) !== 3) {
+            return false;
+        }
+
+        // Split the token into its three parts 
+        [$header, $payload, $signature] = array_map([$this, 'base64UrlDecode'], explode(".", $token));
+
+        $payloadObj = json_decode($payload);
+
+        $recalcSignature = $this->generateJWTSignature($this->base64UrlEncode($header), $this->base64UrlEncode($payload));
+        $tokenExpTime = filter_var($payloadObj->exp, FILTER_SANITIZE_NUMBER_INT);
+
+        // If the new signature matches the original signature and the token hasn't expired, return 1
+        return ($recalcSignature == $signature && $tokenExpTime >= time()) ? true : false;
+    }
+
+    public function getUserId($token = null) {
+
+        if ($this->verify($token) === false) {
+            return 0;
+        }
+
+        [$header, $payload, $signature] = array_map([$this, 'base64UrlDecode'], explode(".", $token));
+
+        $payloadObj = json_decode($payload);
+        if (isset($payloadObj)) {
+            return $payloadObj->userId;
+        } else {
+            return 0;
+        }
+    }
+    
+    
     
 }

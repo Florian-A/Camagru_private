@@ -1,4 +1,7 @@
 <?php
+
+require_once 'jwt.php';
+
 class Test {
 
     // Simple method that returns a message
@@ -27,12 +30,12 @@ class Test {
 
     public function secureAccess($token) {
 
-        $headers = getallheaders();
-
-        if (isset($headers['Authorization']) && preg_match('/Bearer\s(\S+)/', $headers['Authorization'], $matches)) {
-            $token = $matches[1];
+        $jwt = new JWT(1);
+        $userId = $jwt->getUserId($token);
+        if ($userId > 0) {
+            return ["status" => "ok", "userId" => $userId];
+        } else {
+            return ["status" => "fail"];
         }
-
-        return ["status" => "test", "message" => "test", "token" => $token];
     }
 }

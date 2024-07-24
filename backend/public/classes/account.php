@@ -70,7 +70,7 @@ class Account
                         "userId" => $user['id']
                     ]
                 );
-                $token = $jwt->createJWT($payload);
+                $token = $jwt->create($payload);
                 return ["status" => "success", "message" => "Login successful.", "token" => $token];
             } else {
                 return ["status" => "error", "message" => "Account is not activated. Please check your email to activate your account."];
