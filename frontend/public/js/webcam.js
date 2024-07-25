@@ -121,4 +121,16 @@ if (typeof video === 'undefined') {
     // Load the stickers when the page loads
     window.onload = stickerInjector();
 
+
+    token = getToken();
+    if (token) {
+        const response = await fetch('/api/test/secureaccess/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
+        const data = await response.json();
+        console.log(data);
+    }
 }

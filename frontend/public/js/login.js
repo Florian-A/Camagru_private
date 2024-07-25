@@ -23,6 +23,10 @@ if (typeof loginForm === 'undefined') {
         messageElement.textContent = data.message;
         messageElement.classList.remove('text-success', 'text-error');
         messageElement.classList.add(data.status === 'success' ? 'text-success' : 'text-error');
+
+        if (data.status === 'success') {
+            storeToken(data.token);
+        }
     });
 
 }

@@ -1,3 +1,16 @@
+function storeToken(token) {
+    localStorage.setItem('authToken', token);
+}
+
+function getToken() {
+    return localStorage.getItem('authToken');
+}
+
+fetchWithAuth('/api/some-protected-resource')
+    .then(response => response.json())
+    .then(data => console.log(data))
+    .catch(error => console.error('Error:', error));
+
 // One page navigation block
 function navigate(event, page) {
     event.preventDefault();
