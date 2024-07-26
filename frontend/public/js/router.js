@@ -6,10 +6,18 @@ function getToken() {
     return localStorage.getItem('authToken');
 }
 
-fetchWithAuth('/api/some-protected-resource')
-    .then(response => response.json())
-    .then(data => console.log(data))
-    .catch(error => console.error('Error:', error));
+async function fetchWithAuth(url, options = {}) {
+    const token = getToken();
+
+    if (token) {
+        options.headers = {
+            ...options.headers,
+            'Authorization': `Bearer ${token}`
+        };
+    }
+    const response = await fetch(url, options);
+    return response.json();
+}
 
 // One page navigation block
 function navigate(event, page) {

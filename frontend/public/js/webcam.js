@@ -122,15 +122,49 @@ if (typeof video === 'undefined') {
     window.onload = stickerInjector();
 
 
-    token = getToken();
-    if (token) {
-        const response = await fetch('/api/test/secureaccess/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        });
-        const data = await response.json();
-        console.log(data);
+    // token = getToken();
+    // console.log(token);
+    // if (token) {
+    //     const response = fetch('/api/test/secureaccess/', {
+    //         method: 'GET',
+    //         headers: {
+    //             'Content-Type': 'application/json',
+    //         }
+    //     });
+    //     // show response
+    //     // response.then(data => data.json())
+    //     //     .then(data => console.log(data))
+    //     //     .catch(error => console.error('Error:', error));
+    //     // show response
+    //     response.then(data => data.json())
+    //         .then(data => {
+    //             if (data.status === 'success') {
+    //                 console.log(data);
+    //             } else {
+    //                 console.error('Error:', data);
+    //             }
+    //         })
+    //         .catch(error => console.error('Error:', error));
+    // }
+
+
+    // data = await fetchWithAuth('/api/test/secureaccess/');
+    // console.log(data);
+
+let data;
+
+// Fonction pour récupérer et stocker les données
+async function fetchData() {
+    try {
+        data = await fetchWithAuth('/api/test/secureaccess/');
+        console.log(data); // Utilisez la variable `data` comme vous le souhaitez
+    } catch (error) {
+        console.error('Error:', error);
     }
+}
+
+// Appel initial de la fonction pour récupérer les données
+fetchData();
+console.log(data);
+
 }
