@@ -121,7 +121,7 @@
             const divStiker = document.getElementById('sticker');
 
             try {
-                const response = await fetch('http://localhost/api/sticker/all/');
+                const response = await fetch('./api/sticker/all/');
                 const data = await response.json();
 
                 if (data.status === 'success') {

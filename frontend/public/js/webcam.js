@@ -75,7 +75,7 @@ if (typeof video === 'undefined') {
         const divStiker = document.getElementById('sticker');
 
         try {
-            const response = await fetch(`/api/sticker/all/`);
+            const response = await fetch(`./api/sticker/all/`);
             const data = await response.json();
 
             if (data.status === 'success') {
@@ -118,48 +118,34 @@ if (typeof video === 'undefined') {
     window.onload = stickerInjector();
 
 
-    // token = getToken();
-    // console.log(token);
-    // if (token) {
-    //     const response = fetch('/api/test/secureaccess/', {
-    //         method: 'GET',
-    //         headers: {
-    //             'Content-Type': 'application/json',
-    //         }
-    //     });
-    //     // show response
-    //     // response.then(data => data.json())
-    //     //     .then(data => console.log(data))
-    //     //     .catch(error => console.error('Error:', error));
-    //     // show response
-    //     response.then(data => data.json())
-    //         .then(data => {
-    //             if (data.status === 'success') {
-    //                 console.log(data);
-    //             } else {
-    //                 console.error('Error:', data);
-    //             }
-    //         })
-    //         .catch(error => console.error('Error:', error));
-    // }
-
-
-    // data = await fetchWithAuth('/api/test/secureaccess/');
-    // console.log(data);
-
-let data;
-// Fonction pour récupérer et stocker les données
-async function fetchData() {
-    try {
-        data = await fetchWithAuth('/api/account/check/');
-        console.log(data); // Utilisez la variable `data` comme vous le souhaitez
-    } catch (error) {
-        console.error('Error:', error);
+    let data1;
+    // Fonction pour récupérer et stocker les données
+    async function fetchData1() {
+        try {
+            data1 = await fetchWithAuth('./api/account/check/');
+            console.log(data1); // Utilisez la variable `data` comme vous le souhaitez
+        } catch (error) {
+            console.error('Error:', error);
+        }
     }
-}
 
-// Appel initial de la fonction pour récupérer les données
-fetchData();
-console.log(data);
+    // Appel initial de la fonction pour récupérer les données
+    fetchData1();
+    console.log(data1);
+
+    let data2;
+    // Fonction pour récupérer et stocker les données
+    async function fetchData2() {
+        try {
+            data1 = await fetch('./api/image/getall/');
+            console.log(data2); // Utilisez la variable `data` comme vous le souhaitez
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
+
+    // Appel initial de la fonction pour récupérer les données
+    fetchData2();
+    console.log(data2);
 
 }
