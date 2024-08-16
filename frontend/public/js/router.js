@@ -62,6 +62,10 @@ function loadContent(page) {
                 const script = document.createElement('script');
                 script.src = '/js/login.js';
                 document.body.appendChild(script);
+            } else if (page === 'list') {
+                const script = document.createElement('script');
+                script.src = '/js/list.js';
+                document.body.appendChild(script);
             }
         })
         .catch(error => {
