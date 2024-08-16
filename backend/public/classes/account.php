@@ -80,10 +80,20 @@ class Account
         }
     }
 
-    public function check($token) {
+    public function getUser($token) {
 
         $jwt = new JWT(1);
         $userId = $jwt->getUserId($token);
+        if ($userId > 0) {
+            return $userId;
+        } else {
+            return 0;
+        }
+    }
+
+    public function check($token) {
+
+        $userId = $this->getUser($token);
         if ($userId > 0) {
             return ["status" => "connected", "userId" => $userId];
         } else {

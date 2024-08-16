@@ -61,15 +61,9 @@ if (typeof video === 'undefined') {
                 body: JSON.stringify({ image: imageData, stickersId: selectedStickersIds })
             });
 
-            console.log("f");
-            console.log(response);
-            console.log("f");
-
             if (response.status !== "success") {
-                throw new Error(`Erreur HTTP ! statut : ${response.status}`);
+                throw new Error();
             }
-            
-            console.log('Upload response:', response);
             alert('Image uploaded successfully!');
         } catch (error) {
             console.error('Image upload error:', error);
@@ -154,11 +148,10 @@ if (typeof video === 'undefined') {
     // console.log(data);
 
 let data;
-
 // Fonction pour récupérer et stocker les données
 async function fetchData() {
     try {
-        data = await fetchWithAuth('/api/test/secureaccess/');
+        data = await fetchWithAuth('/api/account/check/');
         console.log(data); // Utilisez la variable `data` comme vous le souhaitez
     } catch (error) {
         console.error('Error:', error);
