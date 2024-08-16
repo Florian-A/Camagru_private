@@ -79,5 +79,16 @@ class Account
             return ["status" => "error", "message" => "Invalid email or password."];
         }
     }
+
+    public function check($token) {
+
+        $jwt = new JWT(1);
+        $userId = $jwt->getUserId($token);
+        if ($userId > 0) {
+            return ["status" => "connected", "userId" => $userId];
+        } else {
+            return ["status" => "error"];
+        }
+    }
     
 }

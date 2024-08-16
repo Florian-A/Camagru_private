@@ -53,7 +53,7 @@ if (typeof video === 'undefined') {
             const selectedStickersIds = overlayStickers.map(img => img.id);
 
             // Send the image and the IDs of the selected stickers via a POST request
-            const response = await fetch('./api/image/upload/', {
+            const response = await fetchWithAuth('./api/image/upload/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -61,14 +61,16 @@ if (typeof video === 'undefined') {
                 body: JSON.stringify({ image: imageData, stickersId: selectedStickersIds })
             });
 
-            const data = await response.json();
-            if (data.status === "error") {
-                console.error('Image upload error:', data.message);
-                alert('Image upload error: ' + data.message);
-            } else {
-                console.log('Upload response:', data);
-                alert('Image uploaded successfully!');
+            console.log("f");
+            console.log(response);
+            console.log("f");
+
+            if (response.status !== "success") {
+                throw new Error(`Erreur HTTP ! statut : ${response.status}`);
             }
+            
+            console.log('Upload response:', response);
+            alert('Image uploaded successfully!');
         } catch (error) {
             console.error('Image upload error:', error);
             alert('Image upload error. Please try again.');

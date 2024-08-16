@@ -15,8 +15,17 @@ async function fetchWithAuth(url, options = {}) {
             'Authorization': `Bearer ${token}`
         };
     }
+
     const response = await fetch(url, options);
-    return response.json();
+
+    // Vérifiez si le type de contenu de la réponse est JSON
+    const contentType = response.headers.get("content-type");
+    if (contentType && contentType.includes("application/json")) {
+        return response.json();
+    } else {
+        // Si le type de contenu n'est pas JSON, renvoyez la réponse telle quelle
+        return response;
+    }
 }
 
 // One page navigation block
