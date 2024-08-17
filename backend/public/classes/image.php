@@ -94,9 +94,9 @@ class Image
         $stmt = $pdo->prepare('SELECT * FROM Image');
         $stmt->execute();
         $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
         
-        header('Content-Type: application/json');
-        echo json_encode($results, JSON_UNESCAPED_SLASHES);
+        return $results;
     }
 
     // Get sticker paths from database

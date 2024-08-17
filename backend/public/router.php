@@ -46,6 +46,7 @@ function routeRequest()
 
     // Call the method with the token as an argument, if it exists
     $result = $instance->$methodName($token ?? null);
+    echo json_encode($result);
 }
 
 // Check if a string is a valid class or method name
