@@ -3,27 +3,33 @@ if (typeof list === 'undefined') {
 
     const list = document.getElementById('listElement');
 
-    // Fonction pour récupérer et stocker les données
-    async function fetchData2() {
+    async function fetchImages() {
         try {
             const response = await fetch('./api/image/getall/');
-            const data = await response.json(); // Convertir la réponse en JSON
+            const data = await response.json();
 
-            // Parcourir le tableau JSON et créer des éléments HTML pour chaque objet
             data.forEach(item => {
                 const itemElement = document.createElement('div');
                 itemElement.innerHTML = `
-                    <p>Image Path: ${item.imagePath}</p>
-                    <img src="${item.imagePath}" />
-                    <p>Created At: ${item.createdAt}</p>
+                    <div class="card">
+                        <div class="card-image">
+                            <img src="${item.imagePath}" class="img-responsive">
+                        </div>
+                        <div class="card-header">
+                            <div class="card-subtitle text-gray">${item.createdAt}</div>
+                        </div>
+                        <div class="card-body">
+                            ...
+                        </div>
+                    </div>
+
                 `;
-                list.appendChild(itemElement); // Ajouter l'élément à la liste
+                list.appendChild(itemElement);
             });
         } catch (error) {
             console.error('Error:', error);
         }
     }
 
-    // Appel initial de la fonction pour récupérer les données
-    fetchData2();
+    fetchImages();
 }

@@ -35,6 +35,6 @@ re:
 clean: down
 	@echo "${YELLOW}> Cleaning and deleting all images 🧹${END}"
 	@ { docker volume ls -q ; echo null; } | xargs -r docker volume rm --force
-	@sudo rm -rf ${HOME}/data/
+	@rm -rf ${HOME}/data/
 
 .PHONY:	all re down clean up build
