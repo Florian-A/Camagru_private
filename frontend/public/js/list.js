@@ -1,6 +1,6 @@
 
-async function displayComment(itemId) {
-    let inputText = document.getElementById('imageId-' + itemId).value;
+async function displayComment(imageId) {
+    const content = document.getElementById('imageId-' + imageId).value;
 
     try {
         const response = await fetchWithAuth('./api/comment/add/', {
@@ -8,12 +8,12 @@ async function displayComment(itemId) {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ itemId, inputText })
+            body: JSON.stringify({ imageId, content })
         });
 
         // Vérifier si la réponse est ok
         if (response.ok) {
-            alert('Your comment: ' + inputText);
+            alert('Your comment: ' + content);
         } else {
             alert('Failed to submit comment.');
         }
@@ -36,15 +36,15 @@ if (typeof list === 'undefined') {
 
             console.log(data);
 
-            data.forEach(item => {
+            data.forEach(image => {
                 const itemElement = document.createElement('div');
                 itemElement.innerHTML = `
-                    <div class="card" image-id="${item.id}">
+                    <div class="card" image-id="${image.id}">
                         <div class="card-image">
-                            <img src="${item.imagePath}" class="img-responsive">
+                            <img src="${image.imagePath}" class="img-responsive">
                         </div>
                         <div class="card-header">
-                            <div class="card-subtitle text-gray">${item.createdAt}</div>
+                            <div class="card-subtitle text-gray">${image.createdAt}</div>
                         </div>
                         <div class="card-body">
                             <div class="panel">
@@ -57,8 +57,8 @@ if (typeof list === 'undefined') {
                             </div>
                             <div class="panel-footer">
                                 <div class="input-group">
-                                    <input id="imageId-${item.id}" class="form-input" type="text" placeholder="Do you like ?">
-                                    <button class="btn btn-primary input-group-btn" onclick="(async () => await displayComment(${item.id}))()">Send</button>
+                                    <input id="imageId-${image.id}" class="form-input" type="text" placeholder="Do you like ?">
+                                    <button class="btn btn-primary input-group-btn" onclick="(async () => await displayComment(${image.id}))()">Send</button>
                                 </div>
                             </div>
                         </div>

@@ -17,28 +17,29 @@ class Comment
         // Get JSON data
         $json = file_get_contents('php://input');
         $data = json_decode($json);
-        //print_r($data);
+        print_r($data);
 
 
         // WIP WIP WIP WIP <<<
         // // Add comment in database
         $pdo = Database::getPDO();
-        $stmt = $pdo->prepare('INSERT INTO Image (imageId, userId, content, createdAt) VALUES (:userId, :imagePath, :createdAt)');
+        $stmt = $pdo->prepare('INSERT INTO Image (imageId, userId, content, createdAt) VALUES (:imageId, :userId, :content, :createdAt)');
 
         try {
             $stmt->execute([
+                'imageId' => $data->imageId,
                 'userId' => $userId,
-                'imagePath' => './static/' . $fileName,
+                'content' => $data->content,
                 'createdAt' => date('Y-m-d H:i:s')
             ]);
     
             // Return the ID of the newly inserted user
-            $imageId = $pdo->lastInsertId();
+            $commentId = $pdo->lastInsertId();
     
-            if ($imageId > 0) {
-                return ["status" => "success", "imageId" => $imageId];
+            if ($commentId > 0) {
+                return ["status" => "success", "contentId" => $commentId];
             } else {
-                return ["status" => "error", "message" => "Failed to upload image."];
+                return ["status" => "error", "message" => "Failed to send content."];
             }
         } catch (PDOException $e) {
             if ($e->errorInfo[1]) {
