@@ -1,12 +1,30 @@
+
+async function displayComment(itemId) {
+    let inputText = document.getElementById('imageId-' + itemId).value;
+
+    try {
+        const response = await fetchWithAuth('./api/comment/add/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ itemId, inputText })
+        });
+
+        // Vérifier si la réponse est ok
+        if (response.ok) {
+            alert('Your comment: ' + inputText);
+        } else {
+            alert('Failed to submit comment.');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('An error occurred while submitting your comment.');
+    }
+}
+
 if (typeof list === 'undefined') {
 
-    function displayComment(itemId) {
-        // Récupérer le texte du champ d'entrée
-        var inputText = document.getElementById('imageId-' + itemId).value;
-        
-        // Afficher une alerte avec le texte récupéré
-        alert('Your comment: ' + inputText);
-    }
 
 
     const list = document.getElementById('list-element');
@@ -40,7 +58,7 @@ if (typeof list === 'undefined') {
                             <div class="panel-footer">
                                 <div class="input-group">
                                     <input id="imageId-${item.id}" class="form-input" type="text" placeholder="Do you like ?">
-                                    <button class="btn btn-primary input-group-btn" onclick="displayComment(${item.id})">Send</button>
+                                    <button class="btn btn-primary input-group-btn" onclick="(async () => await displayComment(${item.id}))()">Send</button>
                                 </div>
                             </div>
                         </div>
