@@ -11,8 +11,8 @@ async function displayComment(imageId) {
             body: JSON.stringify({ imageId, content })
         });
 
-        // Vérifier si la réponse est ok
-        if (response.ok) {
+        // Check if response is ok
+        if (response.status === "success") {
             alert('Your comment: ' + content);
         } else {
             alert('Failed to submit comment.');
@@ -24,8 +24,6 @@ async function displayComment(imageId) {
 }
 
 if (typeof list === 'undefined') {
-
-
 
     const list = document.getElementById('list-element');
 
@@ -53,7 +51,6 @@ if (typeof list === 'undefined') {
                             </div>
                             <div class="panel-body">
 
-
                             </div>
                             <div class="panel-footer">
                                 <div class="input-group">
@@ -66,6 +63,16 @@ if (typeof list === 'undefined') {
                 `;
                 list.appendChild(itemElement);
             });
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
+
+    async function fetchComments(imageId) {
+        try {
+            const response = await fetch(`./api/comment/get/${imageId}`);
+            const data = await response.json();
+            console.log(data);
         } catch (error) {
             console.error('Error:', error);
         }

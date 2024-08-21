@@ -17,13 +17,10 @@ class Comment
         // Get JSON data
         $json = file_get_contents('php://input');
         $data = json_decode($json);
-        print_r($data);
 
-
-        // WIP WIP WIP WIP <<<
-        // // Add comment in database
+        // Add comment in database
         $pdo = Database::getPDO();
-        $stmt = $pdo->prepare('INSERT INTO Image (imageId, userId, content, createdAt) VALUES (:imageId, :userId, :content, :createdAt)');
+        $stmt = $pdo->prepare('INSERT INTO Comment (imageId, userId, content, createdAt) VALUES (:imageId, :userId, :content, :createdAt)');
 
         try {
             $stmt->execute([
@@ -47,5 +44,26 @@ class Comment
             }
         }
     }
+
+   // Get comments for a specific image
+   public function get($imageId)
+   {
+       $pdo = Database::getPDO();
+       $stmt = $pdo->prepare('SELECT * FROM Comment WHERE imageId = :imageId');
+
+       try {
+           $stmt->execute(['imageId' => $imageId]);
+           $comments = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+           var_dump($comments);
+
+           return ["status" => "success", "comments" => $comments];
+       } catch (PDOException $e) {
+           if ($e->errorInfo[1]) {
+               return ["status" => "error", "message" => "Unknow error."];
+           }
+       }
+   }
+
 
 }
