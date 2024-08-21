@@ -46,24 +46,27 @@ class Comment
     }
 
    // Get comments for a specific image
-   public function get($imageId)
-   {
-       $pdo = Database::getPDO();
-       $stmt = $pdo->prepare('SELECT * FROM Comment WHERE imageId = :imageId');
+    public function get($token)
+    {
 
-       try {
-           $stmt->execute(['imageId' => $imageId]);
-           $comments = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        echo $token;
 
-           var_dump($comments);
+        // $pdo = Database::getPDO();
+        // $stmt = $pdo->prepare('SELECT * FROM Comment WHERE imageId = :imageId');
 
-           return ["status" => "success", "comments" => $comments];
-       } catch (PDOException $e) {
-           if ($e->errorInfo[1]) {
-               return ["status" => "error", "message" => "Unknow error."];
-           }
-       }
-   }
+        // try {
+        //     $stmt->execute(['imageId' => $imageId]);
+        //     $comments = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        //     var_dump($comments);
+
+        //     return ["status" => "success", "comments" => $comments];
+        // } catch (PDOException $e) {
+        //     if ($e->errorInfo[1]) {
+        //         return ["status" => "error", "message" => "Unknow error."];
+        //     }
+        // }
+    }
 
 
 }
