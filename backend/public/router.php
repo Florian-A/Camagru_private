@@ -15,6 +15,7 @@ function routeRequest()
     // Get the class and method name
     $className = $parts[0];
     $methodName = $parts[1];
+    $param = $parts[2] ?? null;
 
     if (!isValidName($className) || !isValidName($methodName)) {
         sendErrorResponse("Invalid class or method name");
@@ -45,7 +46,7 @@ function routeRequest()
     }
 
     // Call the method with the token as an argument, if it exists
-    $result = $instance->$methodName($token ?? null);
+    $result = $instance->$methodName($token ?? null, $param);
     echo json_encode($result);
 }
 

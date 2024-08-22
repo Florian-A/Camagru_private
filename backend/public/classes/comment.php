@@ -29,10 +29,10 @@ class Comment
                 'content' => $data->content,
                 'createdAt' => date('Y-m-d H:i:s')
             ]);
-    
+
             // Return the ID of the newly inserted user
             $commentId = $pdo->lastInsertId();
-    
+
             if ($commentId > 0) {
                 return ["status" => "success", "contentId" => $commentId];
             } else {
@@ -45,28 +45,25 @@ class Comment
         }
     }
 
-   // Get comments for a specific image
-    public function get($token)
+    // Get comments for a specific image
+    public function get($token, $param)
     {
+        $pdo = Database::getPDO();
+        $stmt = $pdo->prepare('SELECT * FROM Comment WHERE imageId = :imageId');
 
-        echo $token;
+        try {
+            $stmt->execute(['imageId' => $param]);
+            $comments = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        // $pdo = Database::getPDO();
-        // $stmt = $pdo->prepare('SELECT * FROM Comment WHERE imageId = :imageId');
-
-        // try {
-        //     $stmt->execute(['imageId' => $imageId]);
-        //     $comments = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-        //     var_dump($comments);
-
-        //     return ["status" => "success", "comments" => $comments];
-        // } catch (PDOException $e) {
-        //     if ($e->errorInfo[1]) {
-        //         return ["status" => "error", "message" => "Unknow error."];
-        //     }
-        // }
+            if (count($comments) < 1) {
+                return ["status" => "error", "message" => "No comments found."];
+            } else {
+                return ["status" => "success", "comments" => $comments];
+            }
+        } catch (PDOException $e) {
+            if ($e->errorInfo[1]) {
+                return ["status" => "error", "message" => "Unknow error."];
+            }
+        }
     }
-
-
 }
