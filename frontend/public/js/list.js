@@ -62,21 +62,44 @@ if (typeof list === 'undefined') {
                     </div>
                 `;
                 list.appendChild(itemElement);
+
+                // request to /api/comment/get/:id
+                fetchComments(image.id);
             });
         } catch (error) {
             console.error('Error:', error);
         }
     }
-
     async function fetchComments(imageId) {
         try {
             const response = await fetch(`./api/comment/get/${imageId}`);
             const data = await response.json();
             console.log(data);
+    
+            const commentsContainer = document.getElementById(`comments-${imageId}`);
+            
+            // Check if the commentsContainer exists
+            if (commentsContainer) {
+                commentsContainer.innerHTML = ''; // Clear existing comments
+    
+                data.forEach(comment => {
+                    const commentElement = document.createElement('div');
+                    commentElement.classList.add('comment');
+                    commentElement.innerHTML = `
+                        <div class="comment-content">${comment.content}</div>
+                        <div class="comment-date text-gray">${comment.createdAt}</div>
+                    `;
+                    commentsContainer.appendChild(commentElement);
+                });
+            } else {
+                console.error(`Element with id comments-${imageId} not found.`);
+            }
+    
         } catch (error) {
             console.error('Error:', error);
         }
     }
+    
 
     fetchImages();
 }
