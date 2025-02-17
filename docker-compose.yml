@@ -1,4 +1,5 @@
 version: '3.8'
+
 services:
   frontend:
     build:
@@ -8,9 +9,10 @@ services:
     env_file:
       - .env
     volumes:
-      - frontend:/usr/share/nginx/html:rw
+      - ./frontend/public/:/usr/share/nginx/html  # Bind mount pour synchro en dev
     networks:
       - camagru_network
+
   backend:
     build:
       context: ./backend/
@@ -19,24 +21,26 @@ services:
     env_file:
       - .env
     volumes:
-      - backend:/var/www/html/:rw
-      - static:/var/www/html/static/:rw
+      - ./backend/public/:/var/www/html/
+      - ./backend/static/:/var/www/html/static/
     networks:
       - camagru_network
+
   db:
     build:
       context: ./db
       args:
-      - DB_NAME
-      - DB_USER
-      - DB_PASSWORD
-      - DB_ROOT_PASSWORD
+        - DB_NAME
+        - DB_USER
+        - DB_PASSWORD
+        - DB_ROOT_PASSWORD
     container_name: db
     restart: always
     env_file:
       - .env
     networks:
       - camagru_network
+
   proxy:
     build:
       context: ./proxy/
@@ -48,24 +52,10 @@ services:
       - .env
     networks:
       - camagru_network
+
 volumes:
-  frontend:
-    driver: local
-    driver_opts:
-      type: none
-      device: ./frontend/public/
-      o: bind
   backend:
-    driver: local
-    driver_opts:
-      type: none
-      device: ./backend/public/
-      o: bind
   static:
-    driver: local
-    driver_opts:
-      type: none
-      device: ./backend/static/
-      o: bind
+
 networks:
   camagru_network:

@@ -1,4 +1,3 @@
-console.log('alphaf');
 async function displayComment(imageId) {
     const content = document.getElementById('imageId-' + imageId).value;
 
