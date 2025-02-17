@@ -1,4 +1,4 @@
-
+console.log('alphaf');
 async function displayComment(imageId) {
     const content = document.getElementById('imageId-' + imageId).value;
 
@@ -24,16 +24,20 @@ async function displayComment(imageId) {
 }
 
 if (typeof list === 'undefined') {
-
     const list = document.getElementById('list-element');
 
     async function fetchImages() {
         try {
             const response = await fetch('./api/image/getall/');
             const data = await response.json();
-
-            console.log(data);
-
+    
+            console.log('Fetched images:', data);
+    
+            if (!Array.isArray(data)) {
+                console.error('Expected an array but got:', data);
+                return;
+            }
+    
             data.forEach(image => {
                 const itemElement = document.createElement('div');
                 itemElement.innerHTML = `
@@ -46,43 +50,49 @@ if (typeof list === 'undefined') {
                         </div>
                         <div class="card-body">
                             <div class="panel">
-                            <div class="panel-header">
-                                <div class="panel-title h6">Comments</div>
-                            </div>
-                            <div class="panel-body">
-
-                            </div>
-                            <div class="panel-footer">
-                                <div class="input-group">
-                                    <input id="imageId-${image.id}" class="form-input" type="text" placeholder="Do you like ?">
-                                    <button class="btn btn-primary input-group-btn" onclick="(async () => await displayComment(${image.id}))()">Send</button>
+                                <div class="panel-header">
+                                    <div class="panel-title h6">Comments</div>
+                                </div>
+                                <div class="panel-body" id="comments-${image.id}">
+                                    <!-- Comments will be inserted here -->
+                                </div>
+                                <div class="panel-footer">
+                                    <div class="input-group">
+                                        <input id="imageId-${image.id}" class="form-input" type="text" placeholder="Do you like ?">
+                                        <button class="btn btn-primary input-group-btn" onclick="displayComment(${image.id})">Send</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 `;
                 list.appendChild(itemElement);
-
-                // request to /api/comment/get/:id
+    
                 fetchComments(image.id);
             });
         } catch (error) {
-            console.error('Error:', error);
+            console.error('Error fetching images:', error);
         }
     }
+    
     async function fetchComments(imageId) {
         try {
             const response = await fetch(`./api/comment/get/${imageId}`);
             const data = await response.json();
-            console.log(data);
+            
+            console.log(`Fetched comments for image ${imageId}:`, data);
     
             const commentsContainer = document.getElementById(`comments-${imageId}`);
-            
-            // Check if the commentsContainer exists
-            if (commentsContainer) {
-                commentsContainer.innerHTML = ''; // Clear existing comments
     
-                data.forEach(comment => {
+            if (!commentsContainer) {
+                console.error(`Element with id comments-${imageId} not found.`);
+                return;
+            }
+    
+            commentsContainer.innerHTML = ''; // Clear existing comments
+    
+            if (data && Array.isArray(data.comments)) {
+                data.comments.forEach(comment => {
                     const commentElement = document.createElement('div');
                     commentElement.classList.add('comment');
                     commentElement.innerHTML = `
@@ -92,14 +102,12 @@ if (typeof list === 'undefined') {
                     commentsContainer.appendChild(commentElement);
                 });
             } else {
-                console.error(`Element with id comments-${imageId} not found.`);
+                console.error('Invalid response format for comments:', data);
             }
-    
         } catch (error) {
-            console.error('Error:', error);
+            console.error('Error fetching comments:', error);
         }
     }
     
-
     fetchImages();
 }
