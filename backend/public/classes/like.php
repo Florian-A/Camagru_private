@@ -66,11 +66,11 @@ class Like
     }
 
     // Get the number of likes for each image
-    public function getLikes($imageId)
+    public function get($token, $param)
     {
         $pdo = Database::getPDO();
         $stmt = $pdo->prepare('SELECT COUNT(*) as likeCount FROM `Like` WHERE imageId = :imageId');
-        $stmt->execute(['imageId' => $imageId]);
+        $stmt->execute(['imageId' => $param]);
         $likeCount = $stmt->fetch(PDO::FETCH_ASSOC);
 
         return ["status" => "success", "likeCount" => $likeCount['likeCount']];

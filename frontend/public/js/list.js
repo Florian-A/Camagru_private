@@ -32,6 +32,58 @@ async function displayComment(imageId) {
     }
 }
 
+async function likeImage(imageId) {
+    try {
+        const response = await fetchWithAuth('./api/like/add/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ imageId })
+        });
+
+        const data = await response.json();
+
+        if (data.status === "success") {
+            updateLikeDisplay(imageId, 1);
+        } else {
+            alert('Failed to like image.');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('An error occurred while liking the image.');
+    }
+}
+
+async function unlikeImage(imageId) {
+    try {
+        const response = await fetchWithAuth('./api/like/remove/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ imageId })
+        });
+
+        const data = await response.json();
+
+        if (data.status === "success") {
+            updateLikeDisplay(imageId, -1);
+        } else {
+            alert('Failed to unlike image.');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('An error occurred while unliking the image.');
+    }
+}
+
+function updateLikeDisplay(imageId, increment) {
+    const likeCountElement = document.getElementById(`like-count-${imageId}`);
+    const currentCount = parseInt(likeCountElement.textContent, 10);
+    likeCountElement.textContent = currentCount + increment;
+}
+
 if (typeof list === 'undefined') {
     const list = document.getElementById('list-element');
 
@@ -39,8 +91,6 @@ if (typeof list === 'undefined') {
         try {
             const response = await fetch('./api/image/getall/');
             const data = await response.json();
-
-            console.log('Fetched images:', data);
 
             if (!Array.isArray(data)) {
                 console.error('Expected an array but got:', data);
@@ -72,12 +122,23 @@ if (typeof list === 'undefined') {
                                     </div>
                                 </div>
                             </div>
+                            <div class="panel mt-2">
+                                <div class="panel-header">
+                                    <div class="panel-title h6">Likes</div>
+                                </div>
+                                <div class="panel-body">
+                                    <div id="like-count-${image.id}" class="like-count">0</div>
+                                    <button class="btn btn-success btn-sm" onclick="likeImage(${image.id})">Like</button>
+                                    <button class="btn btn-danger btn-sm" onclick="unlikeImage(${image.id})">Unlike</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 `;
                 list.appendChild(itemElement);
 
                 fetchComments(image.id);
+                fetchLikes(image.id);
             });
         } catch (error) {
             console.error('Error fetching images:', error);
@@ -89,16 +150,8 @@ if (typeof list === 'undefined') {
             const response = await fetch(`./api/comment/get/${imageId}`);
             const data = await response.json();
 
-            console.log(`Fetched comments for image ${imageId}:`, data);
-
             const commentsContainer = document.getElementById(`comments-${imageId}`);
-
-            if (!commentsContainer) {
-                console.error(`Element with id comments-${imageId} not found.`);
-                return;
-            }
-
-            commentsContainer.innerHTML = ''; // Clear existing comments
+            commentsContainer.innerHTML = '';
 
             if (data && Array.isArray(data.comments)) {
                 data.comments.forEach(comment => {
@@ -117,5 +170,22 @@ if (typeof list === 'undefined') {
             console.error('Error fetching comments:', error);
         }
     }
+
+    async function fetchLikes(imageId) {
+        try {
+            const response = await fetch(`./api/like/get/${imageId}`);
+            const data = await response.json();
+
+            if (data.status === "success") {
+                const likeCountElement = document.getElementById(`like-count-${imageId}`);
+                likeCountElement.textContent = data.likeCount;
+            } else {
+                console.error('Error fetching likes:', data);
+            }
+        } catch (error) {
+            console.error('Error fetching likes:', error);
+        }
+    }
+
     fetchImages();
 }
