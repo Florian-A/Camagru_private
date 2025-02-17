@@ -1,5 +1,6 @@
 async function displayComment(imageId) {
-    const content = document.getElementById('imageId-' + imageId).value;
+    const contentElement = document.getElementById('imageId-' + imageId);
+    const content = contentElement.value;
 
     try {
         const response = await fetchWithAuth('./api/comment/add/', {
@@ -10,9 +11,18 @@ async function displayComment(imageId) {
             body: JSON.stringify({ imageId, content })
         });
 
-        // Check if response is ok
-        if (response.status === "success") {
-            alert('Your comment: ' + content);
+        const data = response;
+
+        if (data.status === "success") {
+            const commentsContainer = document.getElementById(`comments-${imageId}`);
+            const commentElement = document.createElement('div');
+            commentElement.classList.add('comment');
+            commentElement.innerHTML = `
+                <div class="comment-content">${content}</div>
+                <div class="comment-date text-gray">Just now</div>
+            `;
+            commentsContainer.appendChild(commentElement);
+            contentElement.value = '';
         } else {
             alert('Failed to submit comment.');
         }
@@ -29,14 +39,14 @@ if (typeof list === 'undefined') {
         try {
             const response = await fetch('./api/image/getall/');
             const data = await response.json();
-    
+
             console.log('Fetched images:', data);
-    
+
             if (!Array.isArray(data)) {
                 console.error('Expected an array but got:', data);
                 return;
             }
-    
+
             data.forEach(image => {
                 const itemElement = document.createElement('div');
                 itemElement.innerHTML = `
@@ -66,30 +76,30 @@ if (typeof list === 'undefined') {
                     </div>
                 `;
                 list.appendChild(itemElement);
-    
+
                 fetchComments(image.id);
             });
         } catch (error) {
             console.error('Error fetching images:', error);
         }
     }
-    
+
     async function fetchComments(imageId) {
         try {
             const response = await fetch(`./api/comment/get/${imageId}`);
             const data = await response.json();
-            
+
             console.log(`Fetched comments for image ${imageId}:`, data);
-    
+
             const commentsContainer = document.getElementById(`comments-${imageId}`);
-    
+
             if (!commentsContainer) {
                 console.error(`Element with id comments-${imageId} not found.`);
                 return;
             }
-    
+
             commentsContainer.innerHTML = ''; // Clear existing comments
-    
+
             if (data && Array.isArray(data.comments)) {
                 data.comments.forEach(comment => {
                     const commentElement = document.createElement('div');
@@ -107,6 +117,5 @@ if (typeof list === 'undefined') {
             console.error('Error fetching comments:', error);
         }
     }
-    
     fetchImages();
 }
